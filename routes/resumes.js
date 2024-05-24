@@ -6,5 +6,6 @@ router.post('/uploadResumeDetails', resumeController.uploadResumeDetails);
 router.get('/getResumeById/:id', resumeController.getResumeById);
 router.get('/getResumeByName/:name', resumeController.getResumeByName);
 router.delete('/deleteResumeById/:id', resumeController.deleteResumeById);
+router.get('/getAllResumes', resumeController.getAllResumes);
 
 module.exports = router;

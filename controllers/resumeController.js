@@ -66,9 +66,27 @@ const deleteResumeById = async (req, res) => {
     }
 };
 
+const getAllResumes = async (req, res) => {
+    const {page = 1, limit = 10} = req.query;
+    const offset = (page - 1) * limit;
+    try {
+        const resumes = await resumeModel.getAllResumes(limit, offset);
+        res.json({
+            totalCount: resumes.totalCount,
+            resumes: resumes.data,
+            currentPage: parseInt(page, 10),
+            totalPages: Math.ceil(resumes.totalCount / limit),
+        });
+    } catch (err) {
+        console.error('Error executing query', err);
+        res.status(500).send('Error fetching data');
+    }
+};
+
 module.exports = {
     uploadResumeDetails,
     getResumeById,
     getResumeByName,
     deleteResumeById,
+    getAllResumes,
 };

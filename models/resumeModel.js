@@ -30,9 +30,22 @@ const deleteResumeById = async (resume_id) => {
     return result.rows;
 };
 
+const getAllResumes = async (limit, offset) => {
+    const resultQuery = 'SELECT * FROM resumes ORDER BY name LIMIT $1 OFFSET $2';
+    const countQuery = 'SELECT COUNT(*) FROM resumes';
+    const result = await pool.query(resultQuery, [limit, offset]);
+    const countResult = await pool.query(countQuery, []);
+    const totalCount = parseInt(countResult.rows[0].count, 10);
+    return {
+        totalCount,
+        data: result.rows,
+    };
+};
+
 module.exports = {
     createResume,
     getResumeById,
     getResumesByName,
     deleteResumeById,
+    getAllResumes,
 };
