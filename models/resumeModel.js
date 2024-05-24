@@ -24,8 +24,15 @@ const getResumesByName = async (firstName, lastName) => {
     return result.rows;
 };
 
+const deleteResumeById = async (resume_id) => {
+    const query = 'DELETE FROM resumes WHERE resume_id = $1 RETURNING *';
+    const result = await pool.query(query, [resume_id]);
+    return result.rows;
+};
+
 module.exports = {
     createResume,
     getResumeById,
     getResumesByName,
+    deleteResumeById,
 };

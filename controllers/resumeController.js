@@ -52,8 +52,23 @@ const getResumeByName = async (req, res) => {
     }
 };
 
+const deleteResumeById = async (req, res) => {
+    const resume_id = req.params.id;
+    try {
+        const resumes = await resumeModel.deleteResumeById(resume_id);
+        if (resumes.length === 0) {
+            return res.status(404).json({ error: 'Resume not found' });
+        }
+        res.status(200).json({message: 'Resume deleted successfully'});
+    } catch (err) {
+        console.error('Error executing query', err);
+        res.status(500).send('Error deleting data');
+    }
+};
+
 module.exports = {
     uploadResumeDetails,
     getResumeById,
     getResumeByName,
+    deleteResumeById,
 };
