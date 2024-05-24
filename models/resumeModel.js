@@ -42,10 +42,25 @@ const getAllResumes = async (limit, offset) => {
     };
 };
 
+const updateResumeById = async (resume_id, updates) => {
+    const updateFields = [];
+    const updateValues = [];
+    Object.entries(updates).forEach(([key, value], index) => {
+        updateFields.push(`${key} = $${index + 1}`);
+        updateValues.push(value);
+    });
+    updateValues.push(resume_id);
+    const query = `UPDATE resumes SET ${updateFields.join(', ')} WHERE resume_id = $${updateValues.length} RETURNING *`;
+    const result = await pool.query(query, updateValues);
+    console.log('updateResumeById => ', updateFields, updateValues, query, result);
+    return result.rows;
+};
+
 module.exports = {
     createResume,
     getResumeById,
     getResumesByName,
     deleteResumeById,
     getAllResumes,
+    updateResumeById,
 };

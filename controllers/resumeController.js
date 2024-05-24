@@ -1,4 +1,4 @@
-const { v4: uuidv4 } = require('uuid');
+const { v4: uuidv4, validate: isUuid } = require('uuid');
 const resumeModel = require('../models/resumeModel');
 
 const uploadResumeDetails = async (req, res) => {
@@ -21,7 +21,9 @@ const uploadResumeDetails = async (req, res) => {
 
 const getResumeById = async (req, res) => {
     const resume_id = req.params.id;
-
+    if (!isUuid(resume_id)) {
+        return res.status(400).json({ error: 'Invalid resume_id format' });
+    }
     try {
         const resume = await resumeModel.getResumeById(resume_id);
         if (!resume) {
@@ -54,6 +56,9 @@ const getResumeByName = async (req, res) => {
 
 const deleteResumeById = async (req, res) => {
     const resume_id = req.params.id;
+    if (!isUuid(resume_id)) {
+        return res.status(400).json({ error: 'Invalid resume_id format' });
+    }
     try {
         const resumes = await resumeModel.deleteResumeById(resume_id);
         if (resumes.length === 0) {
@@ -83,10 +88,32 @@ const getAllResumes = async (req, res) => {
     }
 };
 
+const updateResumeById = async (req, res) => {
+    const resume_id = req.params.id;
+    const updates = req.body;
+    if (!isUuid(resume_id)) {
+        return res.status(400).json({ error: 'Invalid resume_id format' });
+    }
+    if (Object.keys(updates).length === 0) {
+        res.status(404).json({error: 'No fields to update'});
+    }
+    try {
+        const resumes = await resumeModel.updateResumeById(resume_id, updates);
+        if (resumes.length === 0) {
+            res.status(404).json({error: 'No resume found with this id'});
+        }
+        res.json(resumes[0]);
+    } catch (err) {
+        console.error('Error executing query', err);
+        res.status(500).send('Error updating data');
+    }
+};
+
 module.exports = {
     uploadResumeDetails,
     getResumeById,
     getResumeByName,
     deleteResumeById,
     getAllResumes,
+    updateResumeById,
 };
