@@ -1,8 +1,8 @@
-const { v4: uuidv4, validate: isUuid } = require('uuid');
-const resumeModel = require('../models/resumeModel');
-const helperFunctions = require('../utils/utils');
+import { v4 as uuidv4, validate as isUuid } from 'uuid';
+import * as resumeModel from '../models/resumeModel';
+import * as helperFunctions from '../utils/utils';
 
-const uploadResumeDetails = async (req, res) => {
+const uploadResumeDetails = async (req: any, res: any) => {
     const { name, current_job_title, current_job_description, current_job_company } = req.body;
     const errorArray = helperFunctions.validateRequest(req.body);
     if (errorArray.length > 0) {
@@ -22,7 +22,7 @@ const uploadResumeDetails = async (req, res) => {
     }
 };
 
-const getResumeById = async (req, res) => {
+const getResumeById = async (req: any, res: any) => {
     const resume_id = req.params.id;
     if (!isUuid(resume_id)) {
         return res.status(400).json({ error: 'Invalid resume_id format' });
@@ -39,7 +39,7 @@ const getResumeById = async (req, res) => {
     }
 };
 
-const getResumeByName = async (req, res) => {
+const getResumeByName = async (req: any, res: any) => {
     const encodedName = req.params.name;
     const decodedName = decodeURIComponent(encodedName).replace('+', ' ');
 
@@ -57,7 +57,7 @@ const getResumeByName = async (req, res) => {
     }
 };
 
-const deleteResumeById = async (req, res) => {
+const deleteResumeById = async (req: any, res: any) => {
     const resume_id = req.params.id;
     if (!isUuid(resume_id)) {
         return res.status(400).json({ error: 'Invalid resume_id format' });
@@ -74,7 +74,7 @@ const deleteResumeById = async (req, res) => {
     }
 };
 
-const getAllResumes = async (req, res) => {
+const getAllResumes = async (req: any, res: any) => {
     const {page = 1, limit = 10} = req.query;
     const offset = (page - 1) * limit;
     try {
@@ -91,7 +91,7 @@ const getAllResumes = async (req, res) => {
     }
 };
 
-const updateResumeById = async (req, res) => {
+const updateResumeById = async (req: any, res: any) => {
     const resume_id = req.params.id;
     const updates = req.body;
     const errorArray = helperFunctions.validateRequest(updates);
@@ -116,11 +116,11 @@ const updateResumeById = async (req, res) => {
     }
 };
 
-module.exports = {
+export {
     uploadResumeDetails,
+    updateResumeById,
+    getAllResumes,
     getResumeById,
     getResumeByName,
     deleteResumeById,
-    getAllResumes,
-    updateResumeById,
 };

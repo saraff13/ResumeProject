@@ -1,4 +1,8 @@
-const validateRequest = (req) => {
+interface RequestObject {
+    [key: string]: string | null | undefined;
+}
+
+export const validateRequest = (req: RequestObject): string[] => {
     const errorArray = [];
     for (const [key, value] of Object.entries(req)) {
         if (key?.toString() === 'name') {
@@ -10,8 +14,4 @@ const validateRequest = (req) => {
         }
     }
     return errorArray;
-};
-
-module.exports = {
-    validateRequest,
 };
