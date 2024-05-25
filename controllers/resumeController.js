@@ -1,16 +1,19 @@
 const { v4: uuidv4, validate: isUuid } = require('uuid');
 const resumeModel = require('../models/resumeModel');
+const helperFunctions = require('../utils/utils');
 
 const uploadResumeDetails = async (req, res) => {
     const { name, current_job_title, current_job_description, current_job_company } = req.body;
-
-    if (!name || !name.includes(' ')) {
-        return res.status(400).json({ error: 'Name must contain both first name and last name separated by a space' });
+    const errorArray = helperFunctions.validateRequest(req.body);
+    if (errorArray.length > 0) {
+        return res.status(400).json({error: errorArray});
     }
-
     const resume_id = uuidv4();
-
     try {
+        const duplicateResume = await resumeModel.duplicateResume(name, current_job_title, current_job_description, current_job_company);
+        if (duplicateResume?.length > 0) {
+            return res.status(409).json({error: 'A resume with same details already exists', resume_id: duplicateResume[0]?.resume_id});
+        }
         const newResumeId = await resumeModel.createResume(resume_id, name, current_job_title, current_job_description, current_job_company);
         res.status(201).json({ resume_id: newResumeId });
     } catch (err) {
@@ -91,6 +94,10 @@ const getAllResumes = async (req, res) => {
 const updateResumeById = async (req, res) => {
     const resume_id = req.params.id;
     const updates = req.body;
+    const errorArray = helperFunctions.validateRequest(updates);
+    if (errorArray.length > 0) {
+        return res.status(400).json({error: errorArray});
+    }
     if (!isUuid(resume_id)) {
         return res.status(400).json({ error: 'Invalid resume_id format' });
     }

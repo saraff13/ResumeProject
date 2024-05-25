@@ -1,6 +1,12 @@
 
 const pool = require('../config/database');
 
+const duplicateResume = async (name, current_job_title, current_job_description, current_job_company) => {
+    const query = 'SELECT * FROM resumes WHERE name = $1 AND current_job_title = $2 AND current_job_description = $3 AND current_job_company = $4';
+    const result = await pool.query(query, [name, current_job_title, current_job_description, current_job_company]);
+    return result.rows;
+};
+
 const createResume = async (resume_id, name, current_job_title, current_job_description, current_job_company) => {
     const query = 'INSERT INTO resumes (resume_id, name, current_job_title, current_job_description, current_job_company) VALUES ($1, $2, $3, $4, $5) RETURNING resume_id';
     const values = [resume_id, name, current_job_title, current_job_description, current_job_company];
@@ -63,4 +69,5 @@ module.exports = {
     deleteResumeById,
     getAllResumes,
     updateResumeById,
+    duplicateResume,
 };
