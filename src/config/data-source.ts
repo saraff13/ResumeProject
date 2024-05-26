@@ -6,11 +6,11 @@ export const AppDataSource = new DataSource({
     host: 'localhost',
     port: 5432,
     username: 'postgres',
-    password: 'mysecretpassword',
-    database: 'postgres',
+    password: 'resume@123',
+    database: 'resume_database',
     synchronize: true,
     logging: false,
-    entities: [Resume], // Add all entities here
+    entities: [Resume],
     migrations: ['src/migration/**/*.ts'],
     subscribers: ['src/subscriber/**/*.ts'],
 });
