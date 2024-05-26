@@ -1,5 +1,7 @@
 import { v4 as uuidv4, validate as isUuid } from 'uuid';
-import * as resumeModel from '../models/resumeModel';
+// To use model, uncomment below and comment resumeModel from resumeRepository, if facing issue, go to commit 'https://github.com/saraff13/ResumeProject/tree/ec33a9d47e5ff52ebffa328a385c0f19649847b0' and validate resumeController changes
+// import * as resumeModel from '../models/resumeModel'; 
+import * as resumeModel from '../repository/resumeRepository'; // import can also be named as resumeRepository, naming it as resumeModel for convenience
 import * as helperFunctions from '../utils/utils';
 
 const uploadResumeDetails = async (req: any, res: any) => {
@@ -63,8 +65,11 @@ const deleteResumeById = async (req: any, res: any) => {
         return res.status(400).json({ error: 'Invalid resume_id format' });
     }
     try {
-        const resumes = await resumeModel.deleteResumeById(resume_id);
-        if (resumes.length === 0) {
+        // For using models uncomment the commented one and comment similar two lines below
+        const resume = await resumeModel.deleteResumeById(resume_id);
+        // const resumes = await resumeModel.deleteResumeById(resume_id);
+        // if (resumes.length === 0) {
+        if (!resume) {
             return res.status(404).json({ error: 'Resume not found' });
         }
         res.status(200).json({message: 'Resume deleted successfully'});
@@ -102,14 +107,19 @@ const updateResumeById = async (req: any, res: any) => {
         return res.status(400).json({ error: 'Invalid resume_id format' });
     }
     if (Object.keys(updates).length === 0) {
-        res.status(404).json({error: 'No fields to update'});
+        return res.status(404).json({error: 'No fields to update'});
     }
     try {
-        const resumes = await resumeModel.updateResumeById(resume_id, updates);
-        if (resumes.length === 0) {
-            res.status(404).json({error: 'No resume found with this id'});
+        // For using models uncomment the commented one and comment similar two lines below
+        const resume = await resumeModel.updateResumeById(resume_id, updates);
+        // const resumes = await resumeModel.updateResumeById(resume_id, updates);
+        // if (resumes.length === 0) {
+        if (!resume) {
+            return res.status(404).json({error: 'No resume found with this id'});
         }
-        res.json(resumes[0]);
+        // uncomment below line when using models and comment below to below line
+        // res.json(resumes[0]);
+        res.json(resume);
     } catch (err) {
         console.error('Error executing query', err);
         res.status(500).send('Error updating data');
