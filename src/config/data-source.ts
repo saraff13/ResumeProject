@@ -13,4 +13,10 @@ export const AppDataSource = new DataSource({
     entities: [Resume],
     migrations: ['src/migration/**/*.ts'],
     subscribers: ['src/subscriber/**/*.ts'],
+    extra: {
+        max: 10,
+        min: 2,
+        idleTimeoutMillis: 30000,
+        connectionTimeoutMillis: 2000,
+    },
 });
