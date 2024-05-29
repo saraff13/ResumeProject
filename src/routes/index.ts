@@ -1,8 +1,9 @@
 import { Router } from 'express';
 const router = Router();
 import resumeRoutes from './resumes';
+import authRoutes from './auth';
 
-// will add prefix '/resunes' in resumeRoutes
 router.use('/resumes', resumeRoutes);
+router.use('/auth', authRoutes);
 
 export default router;

@@ -15,3 +15,5 @@ export const validateRequest = (req: RequestObject): string[] => {
     }
     return errorArray;
 };
+
+export const secret_key = 'secret_key';

@@ -1,6 +1,9 @@
 import { Router } from 'express';
 const router = Router();
 import { getResumeById, getResumeByName, getAllResumes, uploadResumeDetails, updateResumeById, deleteResumeById } from '../controllers/resumeController';
+import { authenticateToken } from '../middleware/authMiddleware';
+
+router.use(authenticateToken);
 
 router.get('/getResumeById/:id', getResumeById);
 router.get('/getResumeByName/:name', getResumeByName);
