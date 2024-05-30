@@ -1,5 +1,5 @@
 import { DataSource } from 'typeorm';
-import { Resume } from '../entity/Resume';
+import { Resume, User } from '../entity';
 
 export const AppDataSource = new DataSource({
     type: 'postgres',
@@ -10,7 +10,7 @@ export const AppDataSource = new DataSource({
     database: 'resume_database',
     synchronize: true,
     logging: false,
-    entities: [Resume],
+    entities: [Resume, User],
     migrations: ['src/migration/**/*.ts'],
     subscribers: ['src/subscriber/**/*.ts'],
     extra: {
