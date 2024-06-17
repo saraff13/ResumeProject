@@ -17,3 +17,5 @@ export const validateRequest = (req: RequestObject): string[] => {
 };
 
 export const secret_key = 'secret_key';
+
+export const TIME_TO_LIVE = 3600;
