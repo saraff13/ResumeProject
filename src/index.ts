@@ -1,4 +1,7 @@
 import 'reflect-metadata';
+import dotenv from 'dotenv';
+dotenv.config();
+
 import { AppDataSource } from './config/data-source';
 import express from 'express';
 import { json } from 'body-parser';
@@ -9,7 +12,7 @@ const app = express();
 app.use(json());
 app.use('/api', resumeRoutes);
 
-const PORT = process.env.PORT || 3000;
+const PORT = Number(process.env.PORT) || 3000;
 
 // uncomment this if using models
 // app.listen(PORT, () => {
